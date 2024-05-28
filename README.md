@@ -1,6 +1,7 @@
 # mai_f
 Flutter app for household chemicals shop
 
+Video: https://youtu.be/0N81d3oUiQ0
 
 ## Welcome page
 ![alt text](image.png)
