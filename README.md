@@ -18,9 +18,9 @@ Main page have refresh for products
 Have add to cart and add to favorite
 ![alt text](image-5.png)
 
-Card product page 
-
+## Card product page 
 ![alt text](image-6.png)
+
 ## Favorite page
 Here is page with items with you add on yours profile 
 ![alt text](image-7.png)
