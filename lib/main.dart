@@ -7,6 +7,7 @@ import 'package:mai_f/repo/favorite/favorite_provider.dart';
 import 'package:mai_f/repo/shop/shop_provider.dart';
 import 'package:mai_f/themes/theme_data.dart';
 import 'package:mai_f/repo/auth/auth_provider.dart';
+import 'package:mai_f/widgets/product_item.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -24,7 +25,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ShopProvider()),
         ChangeNotifierProvider(
-            create: (_) => FavoritesProvider(Supabase.instance.client))
+            create: (_) => FavoritesProvider(Supabase.instance.client)),
+        ChangeNotifierProvider(create: (_) => CartProvider())
       ],
       child: App(),
     ),

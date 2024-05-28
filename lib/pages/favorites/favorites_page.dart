@@ -4,6 +4,7 @@ import 'package:mai_f/repo/favorite/favorite_provider.dart';
 import 'package:mai_f/widgets/product_item.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter/scheduler.dart';
 
 class FavoritesPage extends StatefulWidget {
   @override
@@ -11,11 +12,17 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
-  late Future<List<dynamic>> _favoritesFuture;
+  Future<List<dynamic>>? _favoritesFuture;
 
   @override
   void initState() {
     super.initState();
+
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _favoritesFuture = _fetchFavoritedProducts();
   }
 
@@ -24,21 +31,21 @@ class _FavoritesPageState extends State<FavoritesPage> {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final clientId = authProvider.userInfo?.id ?? '';
       if (clientId.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('You must be logged in.')),
-        );
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('You must be logged in.')),
+          );
+        });
         return [];
       }
 
       final favoriteResponse = await Supabase.instance.client
           .from('favorite')
-          .select(
-            'product_id ',
-          )
+          .select('product_id')
           .eq('client_id', clientId);
 
       if (favoriteResponse == null) {
-        throw Exception(favoriteResponse);
+        throw Exception('No favorite products found.');
       }
 
       final favoriteData = favoriteResponse as List<dynamic>;
@@ -49,12 +56,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
       for (var id in favoriteProductIds) {
         final response = await Supabase.instance.client
             .from('product')
-            .select(
-              'id, name, price',
-            )
+            .select('id, name, price')
             .eq('id', id);
-        print(response);
-        productList.add(response[0]);
+        if (response.isNotEmpty) {
+          productList.add(response[0]);
+        }
       }
 
       return productList;
@@ -81,8 +87,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
             if (favoritedProducts.isEmpty) {
               return Center(child: Text('No favorites found'));
             }
-
-            // Build the list view of products
             return ListView.builder(
               itemCount: favoritedProducts.length,
               itemBuilder: (context, index) {

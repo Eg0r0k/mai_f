@@ -16,6 +16,7 @@ class ProductItem extends StatefulWidget {
 class _ProductItemState extends State<ProductItem> {
   bool _isFavorite = false;
   bool _isLoadingFavorite = true;
+
   @override
   void initState() {
     super.initState();
@@ -60,6 +61,18 @@ class _ProductItemState extends State<ProductItem> {
     setState(() {
       _isLoadingFavorite = false;
     });
+  }
+
+  void _addToCart(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    cartProvider.addToCart(widget.product);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Added to cart'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   @override
@@ -129,6 +142,11 @@ class _ProductItemState extends State<ProductItem> {
                     '\$${widget.product['price']?.toStringAsFixed(2) ?? '0.00'}',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   ),
+                ],
+              ),
+              Row(
+               mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                children: [
                   IconButton(
                     icon: _isLoadingFavorite
                         ? CircularProgressIndicator(
@@ -144,12 +162,64 @@ class _ProductItemState extends State<ProductItem> {
                           ),
                     onPressed: () => _toggleFavorite(context),
                   ),
+                  ElevatedButton(
+                    onPressed: () => _addToCart(context),
+                    child: Text('Add to Cart'),
+                  ),
                 ],
-              ),
+              )
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+class CartProvider extends ChangeNotifier {
+  final List<Map<String, dynamic>> _cartItems = [];
+
+  List<Map<String, dynamic>> get cartItems => _cartItems;
+
+  void addToCart(Map<String, dynamic> product) {
+    final existingProductIndex =
+        _cartItems.indexWhere((item) => item['id'] == product['id']);
+    if (existingProductIndex >= 0) {
+      _cartItems[existingProductIndex]['quantity'] += 1;
+    } else {
+      _cartItems.add({...product, 'quantity': 1});
+    }
+    notifyListeners();
+  }
+
+  void removeFromCart(String productId) {
+    final existingProductIndex =
+        _cartItems.indexWhere((item) => item['id'] == productId);
+    if (existingProductIndex >= 0) {
+      if (_cartItems[existingProductIndex]['quantity'] > 1) {
+        _cartItems[existingProductIndex]['quantity'] -= 1;
+      } else {
+        _cartItems.removeAt(existingProductIndex);
+      }
+      notifyListeners();
+    }
+  }
+
+  void removeAllFromCart(String productId) {
+    _cartItems.removeWhere((item) => item['id'] == productId);
+    notifyListeners();
+  }
+
+  void placeOrder() {
+    _cartItems.clear();
+    notifyListeners();
+  }
+
+  double getTotalPrice() {
+    double total = 0.0;
+    for (var item in _cartItems) {
+      total += item['price'] * item['quantity'];
+    }
+    return total;
   }
 }

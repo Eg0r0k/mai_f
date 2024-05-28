@@ -93,7 +93,7 @@ class AuthProvider with ChangeNotifier {
     try {
       final user = _repo.supabase.client.auth.currentUser;
       if (user != null) {
-        print("Fetched user info: ${user.id}"); // Debug print
+        print("Fetched user info: ${user.id}"); 
         _userInfo = user;
       } else {
         print("User not found or not logged in");
