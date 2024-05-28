@@ -10,23 +10,31 @@ Flutter app for household chemicals shop
 
 ## Main page
 ![alt text](image-4.png)
+
 Main page have refresh for products 
+
 ![alt text](image-3.png)
 ### Card 
 Have add to cart and add to favorite
 ![alt text](image-5.png)
+
 Card product page 
+
 ![alt text](image-6.png)
 ## Favorite page
 Here is page with items with you add on yours profile 
 ![alt text](image-7.png)
+
 If user is not login he would see this message 
+
 ![alt text](image-11.png)
 
 ## Profile page 
 Here user can see hes ID and email. Can left from profile
 ![alt text](image-8.png)
+
 If you left from profile open popup
+
 ![alt text](image-9.png)
 
 
