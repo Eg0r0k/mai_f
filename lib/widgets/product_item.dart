@@ -108,14 +108,16 @@ class _ProductItemState extends State<ProductItem> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                alignment: Alignment.center,
-                // Uncomment and use your image asset
-                // child: FadeInImage.assetNetwork(
-                //   placeholder: 'assets/placeholder.png',
-                //   image: widget.product['image'] ?? 'https://via.placeholder.com/150',
-                //   fit: BoxFit.cover,
-                //   height: 100,
-                // ),
+                height: 150,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  image: DecorationImage(
+                    image: AssetImage(
+                      'assets/img/placeholder.webp',
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               SizedBox(height: 8),
               Text(
@@ -145,7 +147,7 @@ class _ProductItemState extends State<ProductItem> {
                 ],
               ),
               Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
                     icon: _isLoadingFavorite

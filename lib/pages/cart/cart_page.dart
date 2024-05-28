@@ -24,49 +24,90 @@ class _CartPageState extends State<CartPage> {
           builder: (context, cartProvider, child) {
             return Column(
               children: <Widget>[
-       
                 Expanded(
                   child: ListView.builder(
                     itemCount: cartProvider.cartItems.length,
                     itemBuilder: (context, index) {
                       final product = cartProvider.cartItems[index];
-                      return ListTile(
-                        title: Text(product['name']),
-                        subtitle: Text(
-                          '\$${product['price']?.toStringAsFixed(2) ?? '0.00'} x ${product['quantity']}',
+                      return Card(
+                        color: Colors.black,
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.remove),
-                              onPressed: () {
-                                cartProvider
-                                    .removeFromCart(product['id'].toString());
-                              },
+                        elevation: 5,
+                        child: ListTile(
+                          contentPadding: EdgeInsets.all(15),
+                          title: Text(product['name'],
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                          subtitle: Text(
+                            '\$${product['price']?.toStringAsFixed(2) ?? '0.00'} x ${product['quantity']}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
                             ),
-                            IconButton(
-                              icon: Icon(Icons.add),
-                              onPressed: () {
-                                cartProvider.addToCart(product);
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.delete),
-                              onPressed: () {
-                                cartProvider.removeAllFromCart(
-                                    product['id'].toString());
-                              },
-                            ),
-                          ],
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.remove),
+                                color: Colors.white,
+                                onPressed: () {
+                                  cartProvider
+                                      .removeFromCart(product['id'].toString());
+                                },
+                              ),
+                              Text(
+                                product['quantity'].toString(),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.add),
+                                color: Colors.white,
+                                onPressed: () {
+                                  cartProvider.addToCart(product);
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.delete, color: Colors.red),
+                                onPressed: () {
+                                  cartProvider.removeAllFromCart(
+                                      product['id'].toString());
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
                   ),
                 ),
-                Text(
-                  'Total: \$${cartProvider.getTotalPrice().toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Divider(thickness: 2),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Total:',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '\$${cartProvider.getTotalPrice().toStringAsFixed(2)}',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(height: 16),
                 ElevatedButton(
@@ -79,6 +120,13 @@ class _CartPageState extends State<CartPage> {
                       ),
                     );
                   },
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    textStyle: TextStyle(fontSize: 18),
+                  ),
                   child: Text('Place Order'),
                 ),
               ],

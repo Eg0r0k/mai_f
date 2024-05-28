@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mai_f/widgets/product_item.dart';
 import 'package:provider/provider.dart';
 
-
 class ProductPage extends StatelessWidget {
   final Map<String, dynamic> product;
 
@@ -36,7 +35,7 @@ class ProductPage extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
-                    product['image'] ?? 'https://via.placeholder.com/150',
+                    product['image'] ?? '/assets/img/placeholder.webp',
                     height: 250,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -77,9 +76,6 @@ class ProductPage extends StatelessWidget {
                   ),
                 ],
               ),
-       
-            
-              
             ],
           ),
         ),
