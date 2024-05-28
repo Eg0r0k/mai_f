@@ -17,7 +17,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -91,10 +90,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
               itemCount: favoritedProducts.length,
               itemBuilder: (context, index) {
                 final product = favoritedProducts[index];
-                return ListTile(
-                  title: Text(product['name']),
-                  subtitle: Text('Price: ${product['price']}'),
-                );
+                return ProductItem(product: favoritedProducts[index]);
               },
             );
           } else {
