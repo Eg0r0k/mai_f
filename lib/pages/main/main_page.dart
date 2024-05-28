@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mai_f/pages/cart/cart_page.dart';
+import 'package:mai_f/pages/favorites/favorites_page.dart';
 import 'package:mai_f/pages/home/home_page.dart';
 import 'package:mai_f/pages/user/user_page.dart';
 import 'package:mai_f/widgets/bottom_nav.dart';
@@ -38,7 +39,7 @@ class _MainPageState extends State<MainPage> {
       case 2:
         return CartPage();
       case 3:
-        return Center(child: Text('Favorites Page'));
+        return FavoritesPage();
       case 4:
         return UserPage();
       default:

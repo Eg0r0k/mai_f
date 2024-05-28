@@ -47,7 +47,7 @@ class AuthRepository with IAuthRepository {
         idToken: idToken,
         accessToken: accessToken);
   }
-  
+
   @override
   bool isLogin() => supabase.client.auth.currentUser != null;
 }

@@ -3,6 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mai_f/pages/auth/page/registration_page.dart';
 import 'package:mai_f/pages/start/start_screen.dart';
 import 'package:mai_f/pages/main/main_page.dart';
+import 'package:mai_f/repo/favorite/favorite_provider.dart';
+import 'package:mai_f/repo/shop/shop_provider.dart';
 import 'package:mai_f/themes/theme_data.dart';
 import 'package:mai_f/repo/auth/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +21,10 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ShopProvider()),
+        ChangeNotifierProvider(
+            create: (_) => FavoritesProvider(Supabase.instance.client))
       ],
       child: App(),
     ),

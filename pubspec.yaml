@@ -41,6 +41,7 @@ dependencies:
   equatable: ^2.0.5
   provider: ^6.1.2
   carousel_slider: ^4.2.1
+  responsive_grid: ^2.4.4
 
 dev_dependencies:
   flutter_test:

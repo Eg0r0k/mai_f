@@ -17,12 +17,14 @@ class AuthProvider with ChangeNotifier {
 
   AuthResponse? _authResponse;
   AuthResponse get authResponse => _authResponse ?? AuthResponse();
+
   void onSignUp(String password, String email,
       {required Function() success, required Function(dynamic) failed}) async {
     try {
       final response = await _repo.onSignUpWithEmail(password, email);
       _authResponse = response;
       _isLogin = true;
+      fetchUserInfo();
       success();
     } catch (e) {
       failed("Error signing up: $e");
@@ -64,6 +66,7 @@ class AuthProvider with ChangeNotifier {
       final response = await _repo.onSingUpWithGoogle();
       if (response.user != null) {
         _authResponse = response;
+        fetchUserInfo();
         success();
       }
     } catch (e) {
@@ -78,10 +81,26 @@ class AuthProvider with ChangeNotifier {
     checkUserLogin();
     if (_isLogin) {
       auth();
-      
     } else {
       unAuth();
     }
- 
+  }
+
+  User? _userInfo;
+  User? get userInfo => _userInfo;
+
+  Future<void> fetchUserInfo() async {
+    try {
+      final user = _repo.supabase.client.auth.currentUser;
+      if (user != null) {
+        print("Fetched user info: ${user.id}"); // Debug print
+        _userInfo = user;
+      } else {
+        print("User not found or not logged in");
+      }
+    } catch (e) {
+      print("Error fetching user info: $e");
+    }
+    notifyListeners();
   }
 }

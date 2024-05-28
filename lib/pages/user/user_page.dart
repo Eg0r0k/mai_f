@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mai_f/main.dart';
 import 'package:mai_f/themes/theme_data.dart';
 import 'package:mai_f/repo/auth/auth_provider.dart';
-import 'package:mai_f/utils/platform_utils.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -19,6 +17,7 @@ class _UserPageState extends State<UserPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       _checkAuth();
+      Provider.of<AuthProvider>(context, listen: false).fetchUserInfo();
     });
   }
 
@@ -85,41 +84,70 @@ class _UserPageState extends State<UserPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        title: Text(
+          "Profile",
+          style: TextStyles.displayLarge,
+        ),
         actions: [
           IconButton(
-              onPressed: () {
-                _showSignOutDialog();
-              },
-              icon: Icon(Icons.logout_rounded))
-        ],
-      ),
-      body: Row(
-        children: [
-          TextButton(
-            child: Text('Check'),
-            onPressed: () async {
-              _checkAuth();
-            },
-          ),
-          TextButton(
-            child: Text('singIn google'),
-            onPressed: () async {
-              if (PlatformUtils.isMobile) {
-                Provider.of<AuthProvider>(context, listen: false)
-                    .signInWithGoogle(
-                        success: () => {}, failed: (dynamic error) {});
-              } else {
-                Provider.of<AuthProvider>(context, listen: false)
-                    .signInWithGoogleWeb(
-                        success: () => {}, failed: (dynamic error) {});
-              }
-            },
+            onPressed: _showSignOutDialog,
+            icon: Icon(Icons.logout_rounded),
           ),
         ],
       ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 16.0),
+            _buildUserInfo(authProvider),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUserInfo(AuthProvider authProvider) {
+    if (authProvider.userInfo != null) {
+      return Card(
+        elevation: 3,
+        color: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildInfoRow('ID:', authProvider.userInfo?.id ?? ''),
+              SizedBox(height: 8.0),
+              _buildInfoRow('Email:', authProvider.userInfo?.email ?? ''),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text('No user info available', style: TextStyles.body),
+        ),
+      );
+    }
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: TextStyles.body),
+        Text(value, style: TextStyles.body.copyWith(color: Colors.grey[600])),
+      ],
     );
   }
 }
