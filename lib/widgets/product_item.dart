@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mai_f/pages/product/product_page.dart';
 import 'package:mai_f/repo/auth/auth_provider.dart';
+import 'package:mai_f/repo/cart/cart_provider.dart';
 import 'package:mai_f/repo/favorite/favorite_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -178,50 +179,3 @@ class _ProductItemState extends State<ProductItem> {
   }
 }
 
-class CartProvider extends ChangeNotifier {
-  final List<Map<String, dynamic>> _cartItems = [];
-
-  List<Map<String, dynamic>> get cartItems => _cartItems;
-
-  void addToCart(Map<String, dynamic> product) {
-    final existingProductIndex =
-        _cartItems.indexWhere((item) => item['id'] == product['id']);
-    if (existingProductIndex >= 0) {
-      _cartItems[existingProductIndex]['quantity'] += 1;
-    } else {
-      _cartItems.add({...product, 'quantity': 1});
-    }
-    notifyListeners();
-  }
-
-  void removeFromCart(String productId) {
-    final existingProductIndex =
-        _cartItems.indexWhere((item) => item['id'] == productId);
-    if (existingProductIndex >= 0) {
-      if (_cartItems[existingProductIndex]['quantity'] > 1) {
-        _cartItems[existingProductIndex]['quantity'] -= 1;
-      } else {
-        _cartItems.removeAt(existingProductIndex);
-      }
-      notifyListeners();
-    }
-  }
-
-  void removeAllFromCart(String productId) {
-    _cartItems.removeWhere((item) => item['id'] == productId);
-    notifyListeners();
-  }
-
-  void placeOrder() {
-    _cartItems.clear();
-    notifyListeners();
-  }
-
-  double getTotalPrice() {
-    double total = 0.0;
-    for (var item in _cartItems) {
-      total += item['price'] * item['quantity'];
-    }
-    return total;
-  }
-}

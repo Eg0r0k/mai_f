@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mai_f/pages/auth/page/registration_page.dart';
 import 'package:mai_f/pages/start/start_screen.dart';
 import 'package:mai_f/pages/main/main_page.dart';
+import 'package:mai_f/repo/cart/cart_provider.dart';
 import 'package:mai_f/repo/favorite/favorite_provider.dart';
 import 'package:mai_f/repo/shop/shop_provider.dart';
 import 'package:mai_f/themes/theme_data.dart';
